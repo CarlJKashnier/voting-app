@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Node Authentication</title>
+	<title>Voting App - Profile</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
@@ -20,17 +20,17 @@
 	<div class="row">
 
 		 <!-- FACEBOOK INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
+        <div class="col-sm-12">
+            <div class="well" style="text-align:center">
                 <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
 
                 <p>
-                    <strong>id</strong>: <%= user.facebook.id %><br>
-                    <strong>token</strong>: <%= user.facebook.token %><br>
-                    <strong>name</strong>: <%= user.facebook.name %>
+                    <strong>Name</strong>: <%= user.facebook.name %>
                 </p>
+								<!-- Here is where I want to add the list of Votes -->
 
             </div>
+						<a href="/">The main Page</a>
         </div>
 
 	</div>

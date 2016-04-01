@@ -1,10 +1,10 @@
 var User = require('./users.js');
-var configAuth = require('./auth.js')
+//var configAuth = require('./auth.js')
 require('./passport.js');
 module.exports = function(app, passport){
 
   app.get('/', function(req, res){
-		res.render('index.ejs');
+		res.render('index.ejs', { user: req.user });
 	});
 
   app.get('/profile', isLoggedIn, function(req, res){

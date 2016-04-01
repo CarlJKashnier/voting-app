@@ -11,12 +11,16 @@
 </head>
 <body>
 <div class="container">
-
 	<div class="jumbotron text-center">
-		<h1><span class="fa fa-lock"></span> Node Authentication</h1>
+		<% if (user) {%>
+	 	  Greetings,  <span><%= user.facebook.name %></span>
+			<p>
+				<a href="/profile">Visit your profile</a>
+			</p>
+	 	<%} else {%>
+	 		<span>Please register or login!<br> <a href='/auth/facebook' class='btn btn-primary'><span class='fa fa-facebook'></span> Facebook</a></span>
+	 		<% } %>
 
-		<p>Login or Register with:</p>
-		<a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
 	</div>
 
 </div>
