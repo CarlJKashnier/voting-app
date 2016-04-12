@@ -8,5 +8,5 @@ var voteSchema = mongoose.Schema({
         voters: Object
     },
 });
-
-module.exports = mongoose.model('vote', userSchema);
+//add to git hub
+module.exports = mongoose.model('vote', voteSchema);
