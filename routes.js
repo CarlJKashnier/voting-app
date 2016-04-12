@@ -1,10 +1,17 @@
 var User = require('./users.js');
-//var configAuth = require('./auth.js')
+//var configAuth = require('./auth.js') ttaco
+
 require('./passport.js');
 module.exports = function(app, passport) {
 
     app.get('/', function(req, res) {
         res.render('index.ejs', {
+            user: req.user
+        });
+    });
+    app.get('/poll/', isLoggedIn, function(req, res) {
+        //get poll number
+        res.render('profile.ejs', {
             user: req.user
         });
     });
