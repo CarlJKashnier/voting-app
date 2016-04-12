@@ -9,8 +9,8 @@ var morgan = require('morgan');
 var session = require('express-session');
 require('./passport.js');
 
-mongoose.connect(process.env.MONGOLAB_URI)
-
+mongoose.connect(process.env.MONGOLAB_URI);
+//Add line
 
 //require('./routes.js');
 
