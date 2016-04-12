@@ -26,5 +26,5 @@ require('./routes.js')(app, passport);
 require('./passport.js')(passport);
 
 
-var server = app.listen(process.env.PORT || 8888)
-console.log("Server running on port: "+ (process.env.PORT || 8888 ))
+var server = app.listen(process.env.PORT || 8888);
+console.log("Server running on port: "+ (process.env.PORT || 8888 ));
