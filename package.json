@@ -1,36 +1,36 @@
 {
-  "name": "voting-app",
-  "version": "1.0.0",
-  "description": "FreeCodeCamp.com Backend Heroku Voting tenetive FB auth",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TheDukeOfAwesome/voting-app.git"
-  },
-  "keywords": [
-    "FreeCodeCamp",
-    "Backend",
-    "Voting"
-  ],
-  "author": "Carl J. Kashnier",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/TheDukeOfAwesome/voting-app/issues"
-  },
-  "homepage": "https://github.com/TheDukeOfAwesome/voting-app#readme",
-  "dependencies": {
-    "dotenv": "^2.0.0",
-    "ejs": "^2.4.1",
-    "express": "^4.13.4",
-    "express-session": "^1.13.0",
-    "mongodb": "^2.1.7",
-    "mongoose": "^4.4.7",
-    "morgan": "^1.7.0",
-    "passport": "^0.3.2",
-    "passport-facebook": "^2.1.0",
-    "sanitize-caja": "^0.1.3"
-  }
+    "name": "voting-app",
+    "version": "1.0.0",
+    "description": "FreeCodeCamp.com Backend Heroku Voting tenetive FB auth",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TheDukeOfAwesome/voting-app.git"
+    },
+    "keywords": [
+        "FreeCodeCamp",
+        "Backend",
+        "Voting"
+    ],
+    "author": "Carl J. Kashnier",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/TheDukeOfAwesome/voting-app/issues"
+    },
+    "homepage": "https://github.com/TheDukeOfAwesome/voting-app#readme",
+    "dependencies": {
+        "dotenv": "^2.0.0",
+        "ejs": "^2.4.1",
+        "express": "^4.13.4",
+        "express-session": "^1.13.0",
+        "mongodb": "^2.1.7",
+        "mongoose": "^4.4.7",
+        "morgan": "^1.7.0",
+        "passport": "^0.3.2",
+        "passport-facebook": "^2.1.0",
+        "sanitize-caja": "^0.1.3"
+    }
 }

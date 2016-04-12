@@ -16,9 +16,11 @@ mongoose.connect(process.env.MONGOLAB_URI);
 
 
 app.use(morgan('dev'));
-app.use(session({secret: 'anystringoftext',
-                 saveUninitialized: true,
-               resave: true}));
+app.use(session({
+    secret: 'anystringoftext',
+    saveUninitialized: true,
+    resave: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.set('view engine', 'ejs');
@@ -27,4 +29,4 @@ require('./passport.js')(passport);
 
 
 var server = app.listen(process.env.PORT || 8888);
-console.log("Server running on port: "+ (process.env.PORT || 8888 ));
+console.log("Server running on port: " + (process.env.PORT || 8888));
