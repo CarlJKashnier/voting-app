@@ -13,7 +13,7 @@
 
 	<div class="page-header text-center">
 		<h1>Create a New Poll</h1>
-		<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		<h2>A new poll by: <%= user.facebook.name %></h2>
 	</div>
 
 	<div class="row">
@@ -21,10 +21,10 @@
 		 <!-- FACEBOOK INFORMATION -->
         <div class="col-sm-12">
             <div class="well" style="text-align:center">
-                <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+
 
                 <p>
-                    <strong>Name</strong>: <%= user.facebook.name %>
+										<strong>ID</strong>: <%= user.facebook.id %>
                 </p>
 								<!-- Here is where I want to add the list of Votes -->
 
