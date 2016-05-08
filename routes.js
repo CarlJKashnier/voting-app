@@ -9,9 +9,15 @@ module.exports = function(app, passport) {
             user: req.user
         });
     });
-    app.get('/poll/', isLoggedIn, function(req, res) {
+    app.get('/newpoll', isLoggedIn, function(req, res) {
         //get poll number
-        res.render('profile.ejs', {
+        res.render('newpoll.ejs', {
+            user: req.user
+        });
+    });
+    app.get('/managepolls', isLoggedIn, function(req, res) {
+        //get poll number
+        res.render('managepolls.ejs', {
             user: req.user
         });
     });
