@@ -7,6 +7,8 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var morgan = require('morgan');
 var session = require('express-session');
+var bodyParser = require('body-parser');
+
 require('./passport.js');
 
 mongoose.connect(process.env.MONGOLAB_URI);
@@ -16,6 +18,8 @@ mongoose.connect(process.env.MONGOLAB_URI);
 
 
 app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(session({
     secret: 'anystringoftext',
     saveUninitialized: true,

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Voting App - Profile</title>
+	<title>New Poll Sucess!</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
@@ -12,18 +12,8 @@
 <div class="container">
 
 	<div class="page-header text-center">
-		<h1>Create a New Poll</h1>
-		<h2>A new poll by: <%= user.facebook.name %></h2>
-		<form method="post" action="/newpoll/submit/">
-			<h3>Title</h3><br>
-			<input type="text" name="title"><br />
-			<h3>Elements (seperated by comma)</h3><br>
-			<input type="text" name="elements" /><br><br>
-			<input type="submit">
-
-
-		</form>
-
+		<h1>Congratulations</h1>
+		<p>A new poll by <%= user.facebook.name %> was created!<br />You can view it <a href="localhost:8888/poll/<%= pollNumber %>">here</a></p>
 
 	</div>
 
