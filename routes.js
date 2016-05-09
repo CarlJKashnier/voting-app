@@ -1,5 +1,5 @@
 var User = require('./users.js');
-var mongo = require('mongodb')
+var mongo = require('mongodb');
 //var configAuth = require('./auth.js') ttaco
 
 require('./passport.js');
@@ -27,21 +27,17 @@ module.exports = function(app, passport) {
 
 
 mongo.connect(process.env.MONGOLAB_URI,function(err,db){
-  var currentRecord = db.collection("VoteApp").count(function(err,docs){
-    pollNum = 0;
-    pollNum = docs;
+var pollNumber = db.collection("VoteApp").findOne({"countOfPolls"}, {_id: 0});
     elementsArray = req.body.elements;
     var breakTheElementsApartIntoArray = elementsArray.split(",");
     var mongoPoll = {};
     for (var i=0, len = breakTheElementsApartIntoArray.length; i<len; i++) {
       mongoPoll[breakTheElementsApartIntoArray[i].trim()] = 0;
     }
-    db.collection("VoteApp").insert({pollNum: docs + 1, username: req.user.facebook.name, title: req.body.title, poll: mongoPoll});
+    db.collection("VoteApp").insert({username: req.user.facebook.name, title: req.body.title, poll: mongoPoll});
     res.render('newpollsucess.ejs', {
-        user: req.user,
-        pollNumber: pollNum
+        user: req.user
     });
-});
 });
 
   });
