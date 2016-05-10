@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>New Poll Sucess!</title>
+	<title>Voting App - Profile</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
@@ -12,8 +12,12 @@
 <div class="container">
 
 	<div class="page-header text-center">
-		<h1>Congratulations</h1>
-		<p>A new poll by <%= user.facebook.name %> was created!<br />You can view it <a href="localhost:8888/poll/<%= pollNum %>">here</a></p>
+		<h1>No such poll exists</h1>
+    <p>
+      Welcome to my error page, if you are here that means that the database did not return a set of data for the poll requested. This can be due to about 3-4 things, the most likely is the poll was deleted by the creator and you got an old link. Or there may be a typo in the link. Or my database is down, but then you wouldn't be able to log-in.<br />Anyway, sorry for the lack of joy.
+    </p>
+
+
 
 	</div>
 
@@ -21,15 +25,7 @@
 
 		 <!-- FACEBOOK INFORMATION -->
         <div class="col-sm-12">
-            <div class="well" style="text-align:center">
 
-
-                <p>
-										<strong>ID</strong>: <%= user.facebook.id %>
-                </p>
-								<!-- Here is where I want to add the list of Votes -->
-
-            </div>
 						<a href="/">The main Page</a>
 						<a href="/newpoll">Create a poll</a>
 						<a href="/managepolls">Manage your polls</a>

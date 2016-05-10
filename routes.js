@@ -23,36 +23,90 @@ module.exports = function(app, passport) {
         });
     });
 
-  app.post('/newpoll/submit/', isLoggedIn, function(req, res) {
-
-
-mongo.connect(process.env.MONGOLAB_URI,function(err,db){
-var pollNumber = db.collection("VoteApp").findOne({"countOfPolls"}, {_id: 0});
-    elementsArray = req.body.elements;
-    var breakTheElementsApartIntoArray = elementsArray.split(",");
-    var mongoPoll = {};
-    for (var i=0, len = breakTheElementsApartIntoArray.length; i<len; i++) {
-      mongoPoll[breakTheElementsApartIntoArray[i].trim()] = 0;
-    }
-    db.collection("VoteApp").insert({username: req.user.facebook.name, title: req.body.title, poll: mongoPoll});
-    res.render('newpollsucess.ejs', {
-        user: req.user
+    app.post('/newpoll/submit/', isLoggedIn, function(req, res) {
+        mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+            db.collection("VoteApp").findOne({
+                countOfPolls: {
+                    $gt: 0
+                }
+            }, {
+                _id: 0
+            }, function(err, pollNumber) {
+                console.log(pollNumber.countOfPolls);
+                elementsArray = req.body.elements;
+                var breakTheElementsApartIntoArray = elementsArray.split(",");
+                var mongoPoll = {};
+                for (var i = 0, len = breakTheElementsApartIntoArray.length; i < len; i++) {
+                    mongoPoll[breakTheElementsApartIntoArray[i].trim()] = 0;
+                }
+                db.collection("VoteApp").insert({
+                    username: req.user.facebook.name,
+                    title: req.body.title,
+                    poll: mongoPoll,
+                    pollID: pollNumber.countOfPolls + 1
+                });
+                db.collection("VoteApp").updateOne({
+                    "countOfPolls": {
+                        $gt: 0
+                    }
+                }, {
+                    $inc: {
+                        "countOfPolls": 1
+                    }
+                });
+                res.render('newpollsucess.ejs', {
+                    user: req.user,
+                    pollNum: pollNumber.countOfPolls
+                });
+            });
+        });
     });
+
+  app.post('/pollVote/', function(req, res) {
+    console.log(req.body.Item);
+    var breakApart = req.body.Item;
+     breakApart = breakApart.split("|");
+    var pollb = breakApart[1];
+    var vote = breakApart[0];
+    //console.log(req.body);
+
+    mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+console.log(pollb + " " + vote)
+      db.collection("VoteApp").updateOne({ "pollID": pollb}, {$inc: {poll[vote]: 1}});
+  });
 });
 
-  });
-
-    app.get('/managepolls', isLoggedIn, function(req, res) {
+    app.get('/managepolls/', isLoggedIn, function(req, res) {
         //get poll number
         res.render('managepolls.ejs', {
             user: req.user
         });
     });
     // /poll is where you can view a poll
-    app.get('/poll', isLoggedIn, function(req, res) {
+    app.get('/poll/*', function(req, res) {
         //get poll number
-        res.render('managepolls.ejs', {
-            user: req.user
+
+
+        var pollNum = parseInt(req.params[0]);
+        mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+            db.collection("VoteApp").findOne({
+                "pollID": pollNum
+            }, {
+                _id: 0
+            }, function(err, polldata) {
+                if (err || polldata === undefined || polldata === null) {
+                    res.render('noPoll.ejs', {
+                        user: req.user,
+                    });
+                    return;
+                } else {
+                    res.render('poll.ejs', {
+                        user: req.user,
+                        polldata: polldata
+                    });
+                }
+            });
+
         });
     });
 
