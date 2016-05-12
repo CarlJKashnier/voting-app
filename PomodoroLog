@@ -5,4 +5,5 @@
 5/10 8:20 25 DB issue more or less done. On to rendering the poll.
 5/10 8:50 45 On a roll and worked through break, got the data going to the poll page.
 5/10 9:45 25 Working on getting the poll to show up. Got to get the items displaying
-5/15 10:20 65 last one for the day. - Got the items displying in the list. Must make look prettier. Got hung on updating the DB... should be easy fix or will ask in another pomodoro.
+5/10 10:20 65 last one for the day. - Got the items displying in the list. Must make look prettier. Got hung on updating the DB... should be easy fix or will ask in another pomodoro.
+5/12 8:45 120 Finally a break on the MongoDB update the vote! That was brutal. It is a lean mean on line solution.

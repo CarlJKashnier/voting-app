@@ -56,7 +56,7 @@ module.exports = function(app, passport) {
                 });
                 res.render('newpollsucess.ejs', {
                     user: req.user,
-                    pollNum: pollNumber.countOfPolls
+                    pollNum: pollNumber.countOfPolls +1
                 });
             });
         });
@@ -66,13 +66,35 @@ module.exports = function(app, passport) {
     console.log(req.body.Item);
     var breakApart = req.body.Item;
      breakApart = breakApart.split("|");
-    var pollb = breakApart[1];
+    var pollb = parseInt(breakApart[1]);
     var vote = breakApart[0];
     //console.log(req.body);
 
     mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
-console.log(pollb + " " + vote)
-      db.collection("VoteApp").updateOne({ "pollID": pollb}, {$inc: {poll[vote]: 1}});
+console.log(pollb + " " + vote);
+
+//      db.collection("VoteApp").updateOne({ "pollID": pollb}, {$inc: {poll[vote]: 1}});
+
+
+db.collection("VoteApp").updateOne({ "pollID": pollb }, {$inc : { ["poll."+vote] : 1 }},function(err){if (err){throw err;}else{console.log("sucess");}});
+db.collection("VoteApp").findOne({
+    "pollID": pollb
+}, {
+    _id: 0
+}, function(err, polldata) {
+    if (err || polldata === undefined || polldata === null) {
+        res.render('noPoll.ejs', {
+            user: req.user,
+        });
+        return;
+    } else {
+        res.render('poll.ejs', {
+            user: req.user,
+            polldata: polldata
+        });
+    }
+});
+
   });
 });
 
