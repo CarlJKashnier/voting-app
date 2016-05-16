@@ -1,5 +1,5 @@
 //add to git hub before heroku publish
-git add -A&&git reset .env&&git commit -m "push to heroku update"&&git push -u origin master
+git add -A&&git reset .env&&git commit -m "incramential push for remote"&&git push -u origin master
 //add to git hub after heroku publish with logs
 git add -A&&git reset .env&&git commit -m "push to heroku update"&&git push -u origin master&&git push -u heroku master&&heroku logs -t
 //I will keep this updated with more cheats.

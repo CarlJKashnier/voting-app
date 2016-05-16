@@ -3,7 +3,47 @@
 	<title>Voting App - Profile</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<% if (votedata === true) { %>}
+	<script type="text/javascript">
+	// Load the Visualization API and the corechart package.
+	google.charts.load('current', {'packages':['corechart']});
+
+	// Set a callback to run when the Google Visualization API is loaded.
+	google.charts.setOnLoadCallback(drawChart);
+
+	// Callback that creates and populates a data table,
+	// instantiates the pie chart, passes in the data and
+	// draws it.
+	function drawChart() {
+
+		// Create the data table.
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Options');
+		data.addColumn('number', 'Votes');
+		data.addRows(
+			<%- chartData %>
+		);
+
+		// Set chart options
+		var options = {'title':"<%= polldata.title %>",
+									 'width':400,
+									 'height':300};
+
+		// Instantiate and draw our chart, passing in some options.
+		var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+		chart.draw(data, options);
+	}
+</script>
+<%};%>
+
+
+
+
+
+
+
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
 	</style>
@@ -16,11 +56,21 @@
 </div>
   <div class="text-center">
     <form method="post" action="../pollVote/">
-      <% for(var prop in polldata.poll) {%>
-         <INPUT TYPE="radio" NAME="Item" value="<%= prop %>|<%= polldata.pollID %>"><%= prop %>:<%= polldata.poll[prop] %><br />
+
+<!-- Add table here -->
+<% if (votedata === false) { %>}
+			<% for(var prop in polldata.poll) {%>
+         <% if (votedata === false) { %><INPUT TYPE="radio" NAME="Item" value="<%= prop %>|<%= polldata.pollID %>"> <% } %><%= prop %>:<%= polldata.poll[prop] %><br /></form>
       <% } %>
       <br /><INPUT TYPE="submit" name="submit" value="Submit">
-    </form>
+<% } else { %> <div id="chart_div"></div> <% }%>
+
+
+	</div>
+	<a href="/">The main Page</a>
+	<a href="/newpoll">Create a poll</a>
+	<a href="/managepolls">Manage your polls</a>
+</div>
 
   </div>
 </body>

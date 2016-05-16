@@ -56,47 +56,54 @@ module.exports = function(app, passport) {
                 });
                 res.render('newpollsucess.ejs', {
                     user: req.user,
-                    pollNum: pollNumber.countOfPolls +1
+                    pollNum: pollNumber.countOfPolls + 1
                 });
             });
         });
     });
 
-  app.post('/pollVote/', function(req, res) {
-    console.log(req.body.Item);
-    var breakApart = req.body.Item;
-     breakApart = breakApart.split("|");
-    var pollb = parseInt(breakApart[1]);
-    var vote = breakApart[0];
-    //console.log(req.body);
+    app.post('/pollVote/', function(req, res) {
+        var breakApart = req.body.Item;
+        breakApart = breakApart.split("|");
+        var pollb = parseInt(breakApart[1]);
+        var vote = breakApart[0];
+        //console.log(req.body);
 
-    mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
-console.log(pollb + " " + vote);
+        mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+            console.log(pollb + " " + vote);
+            var ip = req.ip.split(":");
+            ip = ip[3];
+            db.collection("VoteApp").updateOne({
+                "pollID": pollb
+            }, {
+                $inc: {
+                    ["poll." + vote]: 1
+                }
+            }, function(err) {
+                if (err) {
+                    throw err;
+                } else {
+                    console.log("sucess");
+                }
+            });
+            db.collection('voters').insert({"ip" : ip , "poll" : pollb} );
+            db.collection("VoteApp").findOne({
+                "pollID": pollb
+            }, {
+                _id: 0
+            }, function(err, polldata) {
+                if (err || polldata === undefined || polldata === null) {
+                    res.render('noPoll.ejs', {
+                        user: req.user,
+                    });
+                    return;
+                } else {
+                    res.redirect(301, '/poll/' + pollb);
+                }
+            });
 
-//      db.collection("VoteApp").updateOne({ "pollID": pollb}, {$inc: {poll[vote]: 1}});
-
-
-db.collection("VoteApp").updateOne({ "pollID": pollb }, {$inc : { ["poll."+vote] : 1 }},function(err){if (err){throw err;}else{console.log("sucess");}});
-db.collection("VoteApp").findOne({
-    "pollID": pollb
-}, {
-    _id: 0
-}, function(err, polldata) {
-    if (err || polldata === undefined || polldata === null) {
-        res.render('noPoll.ejs', {
-            user: req.user,
         });
-        return;
-    } else {
-        res.render('poll.ejs', {
-            user: req.user,
-            polldata: polldata
-        });
-    }
-});
-
-  });
-});
+    });
 
     app.get('/managepolls/', isLoggedIn, function(req, res) {
         //get poll number
@@ -107,28 +114,52 @@ db.collection("VoteApp").findOne({
     // /poll is where you can view a poll
     app.get('/poll/*', function(req, res) {
         //get poll number
-
-
+        var vote = false;
+        var ip = req.ip.split(":");
+        ip = ip[3];
+        console.log(ip);
         var pollNum = parseInt(req.params[0]);
         mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
-            db.collection("VoteApp").findOne({
-                "pollID": pollNum
+            db.collection('voters').findOne({
+                'ip': ip,
+                "poll": pollNum
             }, {
                 _id: 0
-            }, function(err, polldata) {
-                if (err || polldata === undefined || polldata === null) {
-                    res.render('noPoll.ejs', {
-                        user: req.user,
-                    });
-                    return;
-                } else {
-                    res.render('poll.ejs', {
-                        user: req.user,
-                        polldata: polldata
-                    });
-                }
-            });
+            }, function(err, dataset) {
+                db.collection("VoteApp").findOne({
+                    "pollID": pollNum
+                }, {
+                    _id: 0
+                }, function(err, polldata) {
+                    if (err || polldata === undefined || polldata === null) {
+                        res.render('noPoll.ejs', {
+                            user: req.user,
+                        });
+                        return;
+                    } else {
+                        if (dataset === null) {
 
+                            res.render('poll.ejs', {
+                                user: req.user,
+                                polldata: polldata,
+                                votedata: false
+                            });
+                        } else {
+                            var result = [];
+                            console.log(polldata.poll);
+                            for(var i in polldata.poll)
+result.push([i, polldata.poll [i]]);
+console.log(result);
+                            res.render('poll.ejs', {
+                                user: req.user,
+                                polldata: polldata,
+                                votedata: true,
+                                chartData: result
+                            });
+                        }
+                    }
+                });
+            });
         });
     });
 
