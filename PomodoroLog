@@ -7,3 +7,6 @@
 5/10 9:45 25 Working on getting the poll to show up. Got to get the items displaying
 5/10 10:20 65 last one for the day. - Got the items displying in the list. Must make look prettier. Got hung on updating the DB... should be easy fix or will ask in another pomodoro.
 5/12 8:45 120 Finally a break on the MongoDB update the vote! That was brutal. It is a lean mean on line solution.
+5/16 8:18 160 Problems getting good chart to get the variable from EJS... Will ask
+5/16 11:00 15 Chart working. JSON.stringify(var) was the correct answer.
+5/17 8:10 80 Pulling query for items on manage dashboard. Have to write template.

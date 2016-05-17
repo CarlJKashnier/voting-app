@@ -22,7 +22,22 @@ module.exports = function(app, passport) {
             user: req.user
         });
     });
+    app.post('/pollDel/', isLoggedIn, function(req, res) {
+        //get poll number
+        var rawStuff = req.body.DelStuff.split(":");
+        var pollCheck = rawStuff[0];
+        console.log(pollCheck);
+        mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+            db.collection("VoteApp").remove({
+                'userid': req.user.facebook.id,
+                'pollID': pollCheck
+                            }, {
+                justOne: true
+            });
+            res.redirect(301, '/managepolls');
 
+        });
+    });
     app.post('/newpoll/submit/', isLoggedIn, function(req, res) {
         mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
             db.collection("VoteApp").findOne({
@@ -41,6 +56,7 @@ module.exports = function(app, passport) {
                 }
                 db.collection("VoteApp").insert({
                     username: req.user.facebook.name,
+                    userid: req.user.facebook.id,
                     title: req.body.title,
                     poll: mongoPoll,
                     pollID: pollNumber.countOfPolls + 1
@@ -63,7 +79,6 @@ module.exports = function(app, passport) {
     });
 
     app.post('/pollVote/', function(req, res) {
-      console.log("pollVote");
         var breakApart = req.body.Item;
         breakApart = breakApart.split("|");
         var pollb = parseInt(breakApart[1]);
@@ -106,12 +121,25 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/managepolls/', isLoggedIn, function(req, res) {
-        //get poll number
-        res.render('managepolls.ejs', {
-            user: req.user
+    app.get('/managepolls', isLoggedIn, function(req, res) {
+
+        mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+          console.log("connected to db");
+          console.log(req.user.facebook.id);
+          var userFBID = req.user.facebook.id.toString();
+            db.collection("VoteApp").find({"userid" : req.user.facebook.id.toString()}, {"_id": 0}).limit(50).sort({"pollID":-1}).toArray(function(err, dataset) {
+              console.log(dataset);
+
+                res.render('managepolls.ejs', {
+                    user: req.user,
+                    stuffToRender: dataset
+                });
+            });
         });
+
+
     });
+
     // /poll is where you can view a poll
     app.get('/poll/*', function(req, res) {
         //get poll number

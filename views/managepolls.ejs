@@ -13,22 +13,45 @@
 
 	<div class="page-header text-center">
 		<h1>Manage Polls</h1>
-		<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+
 	</div>
 
 	<div class="row">
 
 		 <!-- FACEBOOK INFORMATION -->
         <div class="col-sm-12">
-            <div class="well" style="text-align:center">
-                <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+<!-- stuffToRender is the variable name -->
+<% for (i=0; i < stuffToRender.length; i++) { %>
+<div class="well">
+	<h1>Title: <%=stuffToRender[i].title %></h1>
+	<h3> By: <%= stuffToRender[i].username %></h3>
+	<% for(var prop in stuffToRender[i].poll) {%>
+		<div class="well" style="display: inline-block;">
+<%= prop %>:<%= stuffToRender[i].poll[prop] %>
+		</div>
+<% } %>
 
-                <p>
-                    <strong>Name</strong>: <%= user.facebook.name %>
-                </p>
-								<!-- Here is where I want to add the list of Votes -->
+<div>
+	<div style="display: inline-block;">
+	<form method="post" action="../pollAdd/">
+		<INPUT TYPE="hidden" name="AddStuff" value="<%=stuffToRender[i].pollID%>:<%=user.facebook.id%>">
+		<INPUT TYPE="submit" name="submit" value="Add More Options">
+	</form>
+</div>
+<div style="display: inline-block;">
+	<form method="post" action="../pollDel/">
+		<INPUT TYPE="hidden" name="DelStuff" value="<%=stuffToRender[i].pollID%>:<%=user.facebook.id%>">
+	<INPUT TYPE="submit" name="submit" value="Delete">
+</form>
 
-            </div>
+
+</div>
+</div>
+</div>
+<% } %>
+
+
+
 						<a href="/">The main Page</a>
 						<a href="/newpoll">Create a poll</a>
 						<a href="/managepolls">Manage your polls</a>
