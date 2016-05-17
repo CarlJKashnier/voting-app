@@ -23,7 +23,7 @@
 		data.addColumn('string', 'Options');
 		data.addColumn('number', 'Votes');
 		data.addRows(
-			<%- chartData %>
+			<%- JSON.stringify(chartData) %>
 		);
 
 		// Set chart options
@@ -55,15 +55,17 @@
     <h3>By: <%= polldata.username %></h3>
 </div>
   <div class="text-center">
-    <form method="post" action="../pollVote/">
 
 <!-- Add table here -->
-<% if (votedata === false) { %>}
+<% if (votedata === false) { %>
 			<% for(var prop in polldata.poll) {%>
-         <% if (votedata === false) { %><INPUT TYPE="radio" NAME="Item" value="<%= prop %>|<%= polldata.pollID %>"> <% } %><%= prop %>:<%= polldata.poll[prop] %><br /></form>
+         <% if (votedata === false) { %>
+					 <form method="post" action="../pollVote/">
+					 <INPUT TYPE="radio" NAME="Item" value="<%= prop %>|<%= polldata.pollID %>"> <% } %><%= prop %><br />
       <% } %>
       <br /><INPUT TYPE="submit" name="submit" value="Submit">
-<% } else { %> <div id="chart_div"></div> <% }%>
+			</form>
+<% } else { %> <div id="chart_div" style="display: inline-block;"></div> <% }%>
 
 
 	</div>

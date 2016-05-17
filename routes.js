@@ -63,6 +63,7 @@ module.exports = function(app, passport) {
     });
 
     app.post('/pollVote/', function(req, res) {
+      console.log("pollVote");
         var breakApart = req.body.Item;
         breakApart = breakApart.split("|");
         var pollb = parseInt(breakApart[1]);
