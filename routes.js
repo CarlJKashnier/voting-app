@@ -42,7 +42,7 @@ app.post('/pollAdd/', isLoggedIn, function(req, res) {
     mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
         db.collection("VoteApp").update({
             "pollID": pollCheck
-        }, { $set:  {["poll." + req.body.stuffToBeAdded] : 0 }
+        }, { $set:  {["poll." + "'"+req.body.stuffToBeAdded+"'"] : 0 }
       },function(err,data){
         res.redirect(301, '/managepolls');
       });
