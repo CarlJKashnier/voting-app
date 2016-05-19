@@ -40,7 +40,7 @@ app.post('/pollAdd/', isLoggedIn, function(req, res) {
   var rawStuff = req.body.AddStuff.split(":");
   var pollCheck = parseInt(rawStuff[0]);
   var toAdd = req.body.stuffToBeAdded;
-  toAdd = toAdd.toString();
+  toAdd = '"'+toAdd.toString()+'"';
     mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
         db.collection("VoteApp").update({
             "pollID": pollCheck
@@ -81,7 +81,7 @@ app.post('/pollAdd/', isLoggedIn, function(req, res) {
                 var breakTheElementsApartIntoArray = elementsArray.split(",");
                 var mongoPoll = {};
                 for (var i = 0, len = breakTheElementsApartIntoArray.length; i < len; i++) {
-                    mongoPoll[breakTheElementsApartIntoArray[i].trim()] = 0;
+                    mongoPoll['"'+breakTheElementsApartIntoArray[i].trim()+'"'] = 0;
                 }
                 db.collection("VoteApp").insert({
                     username: req.user.facebook.name,
