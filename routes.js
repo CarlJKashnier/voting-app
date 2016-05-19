@@ -6,9 +6,22 @@ require('./passport.js');
 module.exports = function(app, passport) {
 
     app.get('/', function(req, res) {
-        res.render('index.ejs', {
-            user: req.user
-        });
+      mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+          db.collection("VoteApp").find({
+            "pollID": {$gt : 1}
+          }, {
+              "_id": 0
+          }).limit(50).sort({
+              "pollID": -1
+          }).toArray(function(err, dataset) {
+              console.log(dataset);
+
+              res.render('index.ejs', {
+                  user: req.user,
+                  stuffToRender: dataset
+              });
+          });
+      });
     });
     app.get('/newpoll', isLoggedIn, function(req, res) {
         //get poll number
@@ -22,22 +35,37 @@ module.exports = function(app, passport) {
             user: req.user
         });
     });
+//Add more elements to an existing poll
+app.post('/pollAdd/', isLoggedIn, function(req, res) {
+  var rawStuff = req.body.AddStuff.split(":");
+  var pollCheck = parseInt(rawStuff[0]);
+    mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+        db.collection("VoteApp").update({
+            "pollID": pollCheck
+        }, { $set:  {["poll." + req.body.stuffToBeAdded] : 0 }
+      },function(err,data){
+        res.redirect(301, '/managepolls');
+      });
+
+    });
+
+});
+    //This removes a post, checks that use user is deleteing their own poll with the req.user.facebook.id - Then redirects back to the Manage Polls page.
     app.post('/pollDel/', isLoggedIn, function(req, res) {
-        //get poll number
         var rawStuff = req.body.DelStuff.split(":");
-        var pollCheck = rawStuff[0];
-        console.log(pollCheck);
+        var pollCheck = parseInt(rawStuff[0]);
         mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
             db.collection("VoteApp").remove({
-                'userid': req.user.facebook.id,
+              "userid":req.user.facebook.id,
                 'pollID': pollCheck
-                            }, {
+            }, {
                 justOne: true
             });
             res.redirect(301, '/managepolls');
-
         });
     });
+
+//This will add a new poll from the client
     app.post('/newpoll/submit/', isLoggedIn, function(req, res) {
         mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
             db.collection("VoteApp").findOne({
@@ -47,7 +75,6 @@ module.exports = function(app, passport) {
             }, {
                 _id: 0
             }, function(err, pollNumber) {
-                console.log(pollNumber.countOfPolls);
                 elementsArray = req.body.elements;
                 var breakTheElementsApartIntoArray = elementsArray.split(",");
                 var mongoPoll = {};
@@ -78,6 +105,7 @@ module.exports = function(app, passport) {
         });
     });
 
+// Process the allowed vote from the poll
     app.post('/pollVote/', function(req, res) {
         var breakApart = req.body.Item;
         breakApart = breakApart.split("|");
@@ -93,6 +121,7 @@ module.exports = function(app, passport) {
                 "pollID": pollb
             }, {
                 $inc: {
+                  //I can't figure out any other way to do this is ES5.
                     ["poll." + vote]: 1
                 }
             }, function(err) {
@@ -102,7 +131,10 @@ module.exports = function(app, passport) {
                     console.log("sucess");
                 }
             });
-            db.collection('voters').insert({"ip" : ip , "poll" : pollb} );
+            db.collection('voters').insert({
+                "ip": ip,
+                "poll": pollb
+            });
             db.collection("VoteApp").findOne({
                 "pollID": pollb
             }, {
@@ -121,14 +153,17 @@ module.exports = function(app, passport) {
         });
     });
 
+//Manage polls, gather all polls, sort highest poll number to lowest, for user then send to EJS for rendering
     app.get('/managepolls', isLoggedIn, function(req, res) {
-
         mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
-          console.log("connected to db");
-          console.log(req.user.facebook.id);
-          var userFBID = req.user.facebook.id.toString();
-            db.collection("VoteApp").find({"userid" : req.user.facebook.id.toString()}, {"_id": 0}).limit(50).sort({"pollID":-1}).toArray(function(err, dataset) {
-              console.log(dataset);
+            db.collection("VoteApp").find({
+                "userid": req.user.facebook.id.toString()
+            }, {
+                "_id": 0
+            }).limit(50).sort({
+                "pollID": -1
+            }).toArray(function(err, dataset) {
+                console.log(dataset);
 
                 res.render('managepolls.ejs', {
                     user: req.user,
@@ -136,13 +171,10 @@ module.exports = function(app, passport) {
                 });
             });
         });
-
-
     });
 
-    // /poll is where you can view a poll
+//find voter's ip, verify the have not voted, if not, let vote, else show table of results. if they vote send back to page and show chart.
     app.get('/poll/*', function(req, res) {
-        //get poll number
         var vote = false;
         var ip = req.ip.split(":");
         ip = ip[3];
@@ -176,9 +208,9 @@ module.exports = function(app, passport) {
                         } else {
                             var result = [];
                             console.log(polldata.poll);
-                            for(var i in polldata.poll)
-result.push([i, polldata.poll [i]]);
-console.log(result);
+                            for (var i in polldata.poll)
+                                result.push([i, polldata.poll[i]]);
+                            console.log(result);
                             res.render('poll.ejs', {
                                 user: req.user,
                                 polldata: polldata,
@@ -191,15 +223,7 @@ console.log(result);
             });
         });
     });
-
-    // /pollmanage is where a user can edit their poll
-    app.get('/pollmanage', isLoggedIn, function(req, res) {
-        //get poll number
-        res.render('managepolls.ejs', {
-            user: req.user
-        });
-    });
-
+//Where the user lands after login I am going to do away with this and forward to managepolls
     app.get('/profile', isLoggedIn, function(req, res) {
         res.render('profile.ejs', {
             user: req.user
@@ -210,7 +234,7 @@ console.log(result);
 
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
-            successRedirect: '/profile',
+            successRedirect: '/managepolls',
             failureRedirect: '/'
         }));
 

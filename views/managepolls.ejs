@@ -23,7 +23,7 @@
 <!-- stuffToRender is the variable name -->
 <% for (i=0; i < stuffToRender.length; i++) { %>
 <div class="well">
-	<h1>Title: <%=stuffToRender[i].title %></h1>
+	<h1><a href="./poll/<%= stuffToRender[i].pollID%>">Title: <%=stuffToRender[i].title %></a></h1>
 	<h3> By: <%= stuffToRender[i].username %></h3>
 	<% for(var prop in stuffToRender[i].poll) {%>
 		<div class="well" style="display: inline-block;">
@@ -34,8 +34,9 @@
 <div>
 	<div style="display: inline-block;">
 	<form method="post" action="../pollAdd/">
-		<INPUT TYPE="hidden" name="AddStuff" value="<%=stuffToRender[i].pollID%>:<%=user.facebook.id%>">
-		<INPUT TYPE="submit" name="submit" value="Add More Options">
+		<INPUT type="text" name="stuffToBeAdded" value="Item"/>
+		<INPUT TYPE="hidden" name="AddStuff" value="<%=stuffToRender[i].pollID%>:<%=user.facebook.id%>" >
+		<INPUT TYPE="submit" name="submit" value="Add Another Option">
 	</form>
 </div>
 <div style="display: inline-block;">

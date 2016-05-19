@@ -15,14 +15,31 @@
 		<% if (user) {%>
 	 	  Greetings,  <span><%= user.facebook.name %></span>
 			<p>
-				<a href="/profile">Visit your profile</a>
+				<% for (i=0; i < stuffToRender.length; i++) { %>
+				<div class="well">
+					<h3><a href="./poll/<%= stuffToRender[i].pollID%>"><%=stuffToRender[i].title %></a></h1>
+					<h4> By: <%= stuffToRender[i].username %></h3>
+					<% } %>
 			</p>
+
 	 	<%} else {%>
 	 		<span>Please register or login!<br> <a href='/auth/facebook' class='btn btn-primary'><span class='fa fa-facebook'></span> Facebook</a></span>
+
+			<p>
+				<% for (i=0; i < stuffToRender.length; i++) { %>
+				<div class="well">
+					<h3><a href="./poll/<%= stuffToRender[i].pollID%>"><%=stuffToRender[i].title %></a></h1>
+					<h4> By: <%= stuffToRender[i].username %></h3>
+					<% } %>
+			</p>
 	 		<% } %>
 
 	</div>
 
 </div>
+<a href="/">The main Page</a>
+<a href="/newpoll">Create a poll</a>
+<a href="/managepolls">Manage your polls</a>
+
 </body>
 </html>

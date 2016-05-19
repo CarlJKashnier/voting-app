@@ -10,3 +10,4 @@
 5/16 8:18 160 Problems getting good chart to get the variable from EJS... Will ask
 5/16 11:00 15 Chart working. JSON.stringify(var) was the correct answer.
 5/17 8:10 80 Pulling query for items on manage dashboard. Have to write template.
+5/17 9:40 80 Dashboard written, working on adding delete. Next up is add more fields.
