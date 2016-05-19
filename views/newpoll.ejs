@@ -14,7 +14,7 @@
 	<div class="page-header text-center">
 		<h1>Create a New Poll</h1>
 		<h2>A new poll by: <%= user.facebook.name %></h2>
-		<form method="post" action="/newpoll/submit/">
+		<form method="post" action="./newpoll/submit/">
 			<h3>Title</h3><br>
 			<input type="text" name="title"><br />
 			<h3>Elements (seperated by comma)</h3><br>
@@ -34,9 +34,7 @@
             <div class="well" style="text-align:center">
 
 
-                <p>
-										<strong>ID</strong>: <%= user.facebook.id %>
-                </p>
+
 								<!-- Here is where I want to add the list of Votes -->
 
             </div>
