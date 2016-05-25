@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var morgan = require('morgan');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var MongoStore = require('connect-mongostore')(session);
 
 require('./passport.js');
 
@@ -21,6 +22,12 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({
+    cookie: {
+        maxAge: 691200000
+    },
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
+      }),
     secret: 'anystringoftext',
     saveUninitialized: true,
     resave: true

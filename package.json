@@ -23,6 +23,7 @@
   "homepage": "https://github.com/TheDukeOfAwesome/voting-app#readme",
   "dependencies": {
     "body-parser": "^1.15.1",
+    "connect-mongostore": "^0.1.4",
     "dotenv": "^2.0.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
